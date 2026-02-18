@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>หน้าหลัก - รายการกิจกรรม</title>
+    <style>
+        .card { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 8px; }
+        .btn { padding: 5px 10px; text-decoration: none; border-radius: 4px; color: white; }
+        .btn-join { background-color: #007bff; }
+        .btn-edit { background-color: #ffc107; color: black; }
+        .search-box { margin-bottom: 20px; padding: 10px; background: #f8f9fa; }
+    </style>
+</head>
+<body>
+
+    <div style="padding: 10px; background: #333; color: white; margin-bottom: 20px;">
+        สวัสดีคุณ <b><?php echo $_SESSION['firstname']; ?></b> | 
+        <a href="/" style="color: #fff;">หน้าแรก</a> |
+        <a href="/create_event" style="color: #0f0;">สร้างกิจกรรม</a> |
+        <a href="/logout" style="color: #f00;">ออกจากระบบ</a>
+    </div>
+
+    <h1>รายการกิจกรรม</h1>
+
+    <div class="search-box">
+        <form action="/" method="GET">
+            <input type="text" name="search" placeholder="ค้นหากิจกรรม..." value="<?php echo htmlspecialchars($data['keyword']); ?>">
+            <button type="submit">ค้นหา</button>
+            <?php if($data['keyword']): ?>
+                <a href="/">ล้างค่า</a>
+            <?php endif; ?>
+        </form>
+    </div>
+
+    <?php 
+    // เช็คว่ามีข้อมูลมั้ย
+    if ($data['events']->num_rows > 0): 
+        while($row = $data['events']->fetch_assoc()): 
+    ?>
+        <div class="card">
+            <h3><?php echo htmlspecialchars($row['event_name']); ?></h3>
+            <p><b>รายละเอียด:</b> <?php echo htmlspecialchars($row['description']); ?></p>
+            <p>
+                <b>วันที่:</b> <?php echo $row['start_date']; ?> ถึง <?php echo $row['end_date']; ?> | 
+                <b>รับจำนวน:</b> <?php echo $row['max_attendees']; ?> คน
+            </p>
+            
+            <div style="margin-top: 10px;">
+                <?php if($_SESSION['user_id'] == $row['user_id']): ?>
+                    <a href="/edit_event?id=<?php echo $row['event_id']; ?>" class="btn btn-edit">แก้ไข</a>
+                    <a href="/participants?id=<?php echo $row['event_id']; ?>" class="btn" style="background-color: purple;">ดูรายชื่อคนสมัคร</a>
+                
+                <?php else: ?>
+                    <?php 
+                        // เช็คว่าเคยสมัครไปหรือยัง (เรียกฟังก์ชัน hasJoined จาก database/registrations.php)
+                        if(hasJoined($_SESSION['user_id'], $row['event_id'])): 
+                    ?>
+                        <button class="btn" style="background-color: gray; cursor: not-allowed;" disabled>ลงทะเบียนแล้ว</button>
+                    <?php else: ?>
+                        <a href="/join_event?id=<?php echo $row['event_id']; ?>" class="btn btn-join" onclick="return confirm('ยืนยันที่จะเข้าร่วมกิจกรรมนี้?');">ขอเข้าร่วม</a>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php 
+        endwhile; 
+    else: 
+    ?>
+        <p>ไม่พบกิจกรรมที่คุณค้นหา</p>
+    <?php endif; ?>
+
+</body>
+</html>
