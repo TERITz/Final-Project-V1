@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id']) || !isset($_GET['id'])) {
 
 $event_id = $_GET['id'];
 
-// ดึงข้อมูลรายชื่อ
+// ดึงข้อมูลรายชื่อผู้ขอเข้าร่วม
 $participants = getParticipants($event_id);
 
 // ส่งไปหน้า View

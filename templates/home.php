@@ -48,16 +48,27 @@
             <div style="margin-top: 10px;">
                 <?php if($_SESSION['user_id'] == $row['user_id']): ?>
                     <a href="/edit_event?id=<?php echo $row['event_id']; ?>" class="btn btn-edit">แก้ไข</a>
-                    <a href="/participants?id=<?php echo $row['event_id']; ?>" class="btn" style="background-color: purple;">ดูรายชื่อคนสมัคร</a>
+                    <a href="/participants?id=<?php echo $row['event_id']; ?>" class="btn" style="background-color: purple;">ดูรายชื่อผู้ขอเข้าร่วม</a>
+                    <a href="/attendeelist?id=<?php echo $row['event_id']; ?>" class="btn" style="background-color: purple;">ดูรายชื่อผู้เข้าร่วม</a>
                 
                 <?php else: ?>
                     <?php 
-                        // เช็คว่าเคยสมัครไปหรือยัง (เรียกฟังก์ชัน hasJoined จาก database/registrations.php)
-                        if(hasJoined($_SESSION['user_id'], $row['event_id'])): 
+                        // 1. ดึงสถานะปัจจุบันมาเก็บไว้ในตัวแปร
+                        $regStatus = getRegistrationStatus($_SESSION['user_id'], $row['event_id']); 
                     ?>
-                        <button class="btn" style="background-color: gray; cursor: not-allowed;" disabled>ลงทะเบียนแล้ว</button>
-                    <?php else: ?>
-                        <a href="/join_event?id=<?php echo $row['event_id']; ?>" class="btn btn-join" onclick="return confirm('ยืนยันที่จะเข้าร่วมกิจกรรมนี้?');">ขอเข้าร่วม</a>
+                    <?php if (!$regStatus): ?>
+                        <a href="/join_event?id=<?php echo $row['event_id']; ?>" 
+                        class="btn btn-join" 
+                        onclick="return confirm('ยืนยันที่จะเข้าร่วมกิจกรรมนี้?');">ขอเข้าร่วม</a>
+
+                    <?php elseif ($regStatus === 'Approved'): ?>
+                        <button class="btn" style="background-color: #ffc107; color: black; cursor: not-allowed;">✔️ เข้าร่วมกิจกรรมแล้ว</a>
+
+                    <?php elseif ($regStatus === 'Pending'): ?>
+                        <button class="btn" style="background-color: gray; cursor: not-allowed;" disabled>ลงทะเบียนเเล้ว</button>
+
+                    <?php elseif ($regStatus === 'Rejected'): ?>
+                        <button class="btn" style="background-color: #f44336; cursor: not-allowed;" disabled>ไม่ผ่านการอนุมัติ</button>
                     <?php endif; ?>
                 <?php endif; ?>
             </div>

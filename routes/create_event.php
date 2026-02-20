@@ -1,7 +1,7 @@
 <?php
 // routes/create_event.php
 
-// เช็คก่อนว่าล็อกอินยัง? ถ้ายังไม่ล็อกอิน ห้ามสร้าง
+// เช็คว่าล็อคอินรึยัง
 if (!isset($_SESSION['user_id'])) {
     header("Location: /login");
     exit;

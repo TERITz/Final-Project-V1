@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>รายชื่อผู้เข้าร่วม</title>
+    <title>คำขอเข้าร่วม</title>
 </head>
 <body>
     <h1>รายชื่อผู้ขอเข้าร่วมกิจกรรม</h1>
@@ -16,6 +16,7 @@
                 <th>ชื่อ-นามสกุล</th>
                 <th>อีเมล</th>
                 <th>สถานะ</th>
+                <th>การอนุมัติ/ปฏิเสธ</th>
             </tr>
         </thead>
         <tbody>
@@ -26,6 +27,19 @@
                     <td><?php echo $row['firstname'] . " " . $row['lastname']; ?></td>
                     <td><?php echo $row['email']; ?></td>
                     <td><?php echo $row['status']; ?></td>
+                    <td>
+                        <?php if ($row['status'] === 'Pending'): ?>
+                            <a href="/approve?reg_id=<?php echo $row['reg_id']; ?>&status=Approved">
+                                <button type="button" style="color: green;">ยอมรับ</button>
+                            </a>
+                            ||
+                            <a href="/approve?reg_id=<?php echo $row['reg_id']; ?>&status=Rejected">
+                                <button type="button" style="color: red;">ปฏิเสธ</button>
+                            </a>
+                        <?php else: ?>
+                            <span style="color: gray;">ดำเนินการแล้ว</span>
+                        <?php endif; ?>
+                    </td>
                 </tr>
                 <?php endwhile; ?>
             <?php else: ?>
