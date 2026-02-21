@@ -11,7 +11,7 @@
                         <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center group-hover:bg-blue-400 transition">
                             <span class="text-white text-lg">E</span>
                         </div>
-                        <span class="text-white font-bold text-xl tracking-wide">EVENTHUB</span>
+                        <span class="text-white font-bold text-xl tracking-wide">EVENKUB</span>
                     </a>
                     
                     <div class="hidden md:flex items-center space-x-1">
