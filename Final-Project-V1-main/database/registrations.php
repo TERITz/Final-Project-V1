@@ -60,6 +60,15 @@ function getattendeelist($event_id) {
     $stmt->execute();
     return $stmt->get_result();
 }
+function getApprovedCount($event_id) {
+    $conn = getConnection();
+    $sql = "SELECT COUNT(*) as total FROM registrations WHERE event_id = ? AND status = 'Approved'";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $event_id);
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
+    return $result['total'] ?? 0;
+}
 // ==========================================
 // Kenz
 // ==========================================
