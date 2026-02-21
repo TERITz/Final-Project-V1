@@ -18,9 +18,6 @@
                         <a href="/" class="text-gray-300 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition hover:bg-slate-800">
                             หน้าแรก
                         </a>
-                        <a href="/my_events" class="text-gray-300 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition hover:bg-slate-800">
-                            กิจกรรมที่เข้าร่วม
-                        </a>
                         <a href="/create_event" class="text-emerald-400 hover:text-emerald-300 px-4 py-2 rounded-md text-sm font-medium transition hover:bg-slate-800 border border-emerald-900/50">
                             + สร้างกิจกรรม
                         </a>

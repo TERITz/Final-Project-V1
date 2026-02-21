@@ -27,7 +27,7 @@
                     <label class="block text-gray-700 text-sm font-semibold mb-1">รหัสผ่าน</label>
                     <input type="password" name="password" required
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-blue-500 outline-none"
-                        placeholder="รหัสผ่าน 1 ตัวขึ้นไป">
+                        placeholder="รหัสผ่าน 6 ตัวขึ้นไป">
                 </div>
             </div>
 

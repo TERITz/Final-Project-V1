@@ -38,47 +38,23 @@ function getAllEvents() {
     return $result; // ส่งคืนเป็น Object ผลลัพธ์ (เอาไป fetch ต่อหน้าเว็บ)
 }
 
-function getEvents($keyword = "", $start_date = "", $end_date = "") {
+function getEvents($keyword = "") {
     $conn = getConnection();
     
-    // ตั้งต้น SQL ด้วย WHERE 1=1 เพื่อให้ง่ายต่อการต่อ String ด้วย AND
-    $sql = "SELECT * FROM events WHERE 1=1";
-    $types = "";     // เก็บชนิดข้อมูลสำหรับ bind_param (เช่น sss)
-    $params = [];    // เก็บค่าตัวแปรที่จะใช้ค้นหา
-    
-    // 1. ถ้ามีการพิมพ์ชื่อค้นหา (ค้นจากชื่อหรือรายละเอียด)
-    if (!empty($keyword)) {
-        $sql .= " AND (event_name LIKE ? OR description LIKE ?)";
+    if ($keyword) {
+        // ถ้ามีการค้นหา ให้หาจากชื่อ หรือ รายละเอียด
+        $sql = "SELECT * FROM events WHERE event_name LIKE ? OR description LIKE ? ORDER BY event_id DESC";
+        $stmt = $conn->prepare($sql);
         $term = "%" . $keyword . "%";
-        $types .= "ss";
-        $params[] = $term;
-        $params[] = $term;
-    }
-    
-    // 2. ถ้ามีการระบุ "วันเริ่มต้น"
-    if (!empty($start_date)) {
-        $sql .= " AND start_date >= ?";
-        $types .= "s";
-        $params[] = $start_date;
-    }
-
-    // 3. ถ้ามีการระบุ "วันสิ้นสุด"
-    if (!empty($end_date)) {
-        $sql .= " AND end_date <= ?";
-        $types .= "s";
-        $params[] = $end_date;
-    }
-    
-    $sql .= " ORDER BY event_id DESC";
-    $stmt = $conn->prepare($sql);
-    
-    // ถ้ามีเงื่อนไขการค้นหา ให้ทำการ bind_param โดยใช้ ... เพื่อกระจายค่าจาก Array
-    if (!empty($types)) {
-        $stmt->bind_param($types, ...$params);
+        $stmt->bind_param("ss", $term, $term);
+    } else {
+        // ถ้าไม่มีการค้นหา ให้ดึงมาทั้งหมด
+        $sql = "SELECT * FROM events ORDER BY event_id DESC";
+        $stmt = $conn->prepare($sql);
     }
     
     $stmt->execute();
-    return $stmt->get_result(); 
+    return $stmt->get_result(); // ส่งผลลัพธ์กลับไปวนลูปหน้าเว็บ
 }
 
 // ดึงข้อมูลกิจกรรมตาม ID (เอาไว้เช็คเจ้าของ และเอาไปโชว์ในฟอร์ม)

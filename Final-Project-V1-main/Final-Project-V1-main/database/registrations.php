@@ -79,18 +79,5 @@ function getRegistrationStatus($user_id, $event_id) {
     }
     return false; // ยังไม่เคยสมัคร
 }
-// ดึงรายการกิจกรรมที่ User คนนี้สมัครไว้ทั้งหมด
-function getMyRegistrations($user_id) {
-    $conn = getConnection();
-    $sql = "SELECT r.*, e.event_name, e.start_date, e.end_date 
-            FROM registrations r
-            JOIN events e ON r.event_id = e.event_id
-            WHERE r.user_id = ?
-            ORDER BY r.reg_date DESC";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    return $stmt->get_result();
-}
 ?>
 
