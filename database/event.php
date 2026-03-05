@@ -145,4 +145,14 @@ function getEventStats($event_id) {
     $stmt->execute();
     return $stmt->get_result()->fetch_assoc();
 }
+
+// ฟังก์ชันดึงรูปภาพทั้งหมดของกิจกรรม
+function getEventImages($event_id) {
+    $conn = getConnection();
+    $sql = "SELECT image_path FROM event_images WHERE event_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $event_id);
+    $stmt->execute();
+    return $stmt->get_result();
+}
 ?>

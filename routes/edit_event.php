@@ -16,7 +16,7 @@ if (!isset($_GET['id'])) {
 $event_id = $_GET['id'];
 $event = getEventById($event_id);
 
-// 3. เช็คว่าเป็นเจ้าของกิจกรรมมั้ย (สำคัญมาก!)
+// 3. เช็คว่าเป็นเจ้าของกิจกรรมมั้ย
 if ($_SESSION['user_id'] != $event['user_id']) {
     echo "<script>alert('คุณไม่มีสิทธิ์แก้ไขกิจกรรมนี้!'); window.location.href='/';</script>";
     exit;

@@ -60,7 +60,7 @@
     if ($data['events']->num_rows > 0):
         while ($row = $data['events']->fetch_assoc()):
             
-            // --- [เพิ่มจุดที่ 1: เช็คจำนวนคนที่อนุมัติแล้ว] ---
+            // 1 เช็คจำนวนคนที่อนุมัติแล้ว
             // เรียกใช้ฟังก์ชันเพื่อนับจำนวนคนที่ Status เป็น 'Approved'
             $approvedCount = getApprovedCount($row['event_id']); 
             

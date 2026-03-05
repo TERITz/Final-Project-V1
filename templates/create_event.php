@@ -45,7 +45,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                     <div>
                         <label class="block text-gray-700 text-sm font-bold mb-2">จำนวนรับสูงสุด (คน):</label>
                         <input type="number" name="max_attendees" required min="1"
@@ -53,9 +53,10 @@
                             placeholder="เช่น 50">
                     </div>
                     <div>
-                        <label class="block text-gray-700 text-sm font-bold mb-2">รูปภาพปกกิจกรรม:</label>
-                        <input type="file" name="event_image" required accept="image/*"
-                            class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer border border-gray-300 rounded-lg py-1.5 px-2">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">รูปภาพปกกิจกรรม (เลือกได้หลายรูป):</label>
+                        <input type="file" name="images[]" multiple required accept="image/*"
+                            class="w-full bg-white text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer border border-gray-300 rounded-lg p-1 outline-none transition focus:border-blue-500">
+                        <p class="text-xs text-gray-400 mt-2">* กด Ctrl ค้างไว้ระหว่างเลือกเพื่อเลือกหลายไฟล์</p>
                     </div>
                 </div>
 

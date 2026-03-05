@@ -2,8 +2,8 @@
 
 $hostname = 'localhost';
 $dbName = 'event_registration_db';
-$username = 'final';
-$password = '1235';
+$username = 'root';
+$password = '';
 $conn = new mysqli($hostname, $username, $password, $dbName);
 
 function getConnection(): mysqli

@@ -1,25 +1,25 @@
 <?php
-// ตรวจสอบว่าเป็นการส่งข้อมูลผ่านฟอร์ม (Method POST) หรือไม่
+// ตรวจสอบว่าเป็นการส่งข้อมูลผ่านฟอร์ม (POST) หรือไม่
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // เชื่อมต่อฐานข้อมูล
     $conn = getConnection(); 
     
-    // --- [ด่านตรวจที่ 1: เช็คว่ากรอกข้อมูลครบทุกช่องหรือไม่] ---
-    // สร้าง Array รายชื่อช่องทั้งหมดที่บังคับว่า "ห้ามว่าง"
+    // 1 เช็คว่ากรอกข้อมูลครบทุกช่องหรือไม่
+    // สร้าง Array รายชื่อช่องทั้งหมด
     $required_fields = ['email', 'password', 'prefix', 'firstname', 'lastname', 'gender', 'birthdate', 'province'];
     
     foreach ($required_fields as $field) {
-        // เช็คว่าไม่มีการส่งค่านั้นมา หรือ ส่งมาแต่เป็นค่าว่างเปล่า (แอบกด Spacebar ก็ไม่รอด!)
+        // เช็คว่าไม่มีการส่งค่านั้นมา หรือ ส่งมาแต่เป็นค่าว่างเปล่า
         if (!isset($_POST[$field]) || trim($_POST[$field]) === '') {
             echo "<script>alert('กรุณากรอกข้อมูลให้ครบทุกช่องก่อนกดยืนยัน'); window.history.back();</script>";
-            exit; // เตะกลับไปหน้าเดิมทันที
+            exit; // กลับไปหน้าเดิมทันที
         }
     }
 
-    // เมื่อผ่านด่านตรวจแรกมาได้ ค่อยรับค่าอีเมลมาใช้งาน
+    // เมื่อผ่านส่วนที่ 1 ก็รับค่าอีเมลมาใช้งาน
     $email = $_POST['email'];
     
-    // --- [ด่านตรวจที่ 2: ขั้นตอนการตรวจสอบอีเมลซ้ำ] ---
+    // 2 ขั้นตอนการตรวจสอบอีเมลซ้ำ
     $check_sql = "SELECT email FROM users WHERE email = ?";
     $check_stmt = $conn->prepare($check_sql);
     $check_stmt->execute([$email]);
@@ -29,11 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 
-    // --- [ด่านตรวจที่ 3: ขั้นตอนการเตรียมข้อมูล] ---
+    // 3 ขั้นตอนการเตรียมข้อมูล
     // เข้ารหัสรหัสผ่านเพื่อความปลอดภัย
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     
-    // ตอนนี้มั่นใจ 100% แล้วว่าตัวแปร $_POST ทุกตัวมีข้อมูลแน่นอน จับยัดใส่ Array ได้เลย
+    // จับใส่ Array เพราะทุกตัวมีข้อมูลแล้วแน่นอน
     $data = [
         $email,
         $password,
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_POST['province']
     ];
 
-    // --- [ด่านสุดท้าย: บันทึกลงฐานข้อมูล] ---
+    // บันทึกลงฐานข้อมูล
     try {
         $sql = "INSERT INTO users (email, password, prefix, firstname, lastname, gender, birthdate, province) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
