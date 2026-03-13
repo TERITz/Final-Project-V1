@@ -20,22 +20,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($event_id) {
         // 2. ถ้าสร้างสำเร็จ -> จัดการอัปโหลดรูป
-        if (isset($_FILES['event_image']) && $_FILES['event_image']['error'] == 0) {
-            
-            // ตั้งชื่อไฟล์ใหม่กันซ้ำ (เช่น event_1_timestamp.jpg)
-            $ext = pathinfo($_FILES['event_image']['name'], PATHINFO_EXTENSION);
-            $new_name = "event_" . $event_id . "_" . time() . "." . $ext;
-            $target = __DIR__ . "/../public/uploads/" . $new_name;
+        if (!file_exists(__DIR__ . "/../public/uploads/")) {
+            mkdir(__DIR__ . "/../public/uploads/", 0777, true);
+        }
 
-            // สร้างโฟลเดอร์ uploads ถ้ายังไม่มี
-            if (!file_exists(__DIR__ . "/../public/uploads/")) {
-                mkdir(__DIR__ . "/../public/uploads/", 0777, true);
-            }
+        if (isset($_FILES['images']) && !empty($_FILES['images']['name'][0])) {
+            foreach ($_FILES['images']['tmp_name'] as $index => $tmp_name) {
+                if ($_FILES['images']['error'][$index] === 0) {
+                    $ext = pathinfo($_FILES['images']['name'][$index], PATHINFO_EXTENSION);
+                    $new_name = "event_" . $event_id . "_" . time() . "_" . $index . "." . $ext;
+                    $target = __DIR__ . "/../public/uploads/" . $new_name;
 
-            // ย้ายไฟล์ไปเก็บ
-            if (move_uploaded_file($_FILES['event_image']['tmp_name'], $target)) {
-                // บันทึกชื่อรูปภาพลง Database
-                addEventImage($event_id, $new_name);
+                    if (move_uploaded_file($tmp_name, $target)) {
+                        addEventImage($event_id, $new_name);
+                    }
+                }
             }
         }
 
@@ -47,4 +46,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 renderView('create_event');
-?>
