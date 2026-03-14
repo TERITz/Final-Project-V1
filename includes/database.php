@@ -12,6 +12,10 @@ function getConnection(): mysqli
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
+    
+    // เซ็ต timezone ให้ MySQL ใช้เวลาไทย
+    $conn->query("SET time_zone = '+07:00'");
+    
     return $conn;
 }
 

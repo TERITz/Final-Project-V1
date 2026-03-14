@@ -22,7 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // 2 ขั้นตอนการตรวจสอบอีเมลซ้ำ
     $check_sql = "SELECT email FROM users WHERE email = ?";
     $check_stmt = $conn->prepare($check_sql);
-    $check_stmt->execute([$email]);
+    $check_stmt->bind_param("s", $email);
+	$check_stmt->execute();
     
     if ($check_stmt->fetch()) {
         echo "<script>alert('อีเมลนี้ถูกใช้งานไปแล้วครับ กรุณาลองใช้อีเมลอื่น'); window.history.back();</script>";

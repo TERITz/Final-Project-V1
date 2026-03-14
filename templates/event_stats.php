@@ -25,7 +25,7 @@
                 <h1 class="text-3xl font-bold text-gray-800 tracking-tight">
                     📊 สถิติกิจกรรม: <?php echo htmlspecialchars($event['event_name']); ?>
                 </h1>
-                <p class="text-gray-500 mt-1">สรุปข้อมูลผู้เข้าร่วมและการเช็คอินแบบเรียลไทม์</p>
+                <p class="text-gray-500 mt-1">สรุปข้อมูลผู้เข้าร่วมและการเช็คอิน</p>
             </div>
             <a href="/" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition shadow-sm">
                 ← กลับหน้าหลัก

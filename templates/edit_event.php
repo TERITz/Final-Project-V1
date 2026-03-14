@@ -58,6 +58,7 @@
                         class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2.5 px-8 rounded-lg shadow-md transition transform active:scale-95">
                         บันทึกการแก้ไข
                     </button>
+                    
                     <a href="/" 
                         class="text-gray-500 hover:text-gray-800 font-bold py-2.5 px-6 transition hover:underline">
                         ยกเลิก

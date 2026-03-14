@@ -1,6 +1,9 @@
 <?php
 // routes/confirm_checkin.php
-if (session_status() === PHP_SESSION_NONE) session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: /login");
+    exit;
+}
 
 // รับค่า ID กิจกรรมและ ID ผู้ใช้จาก URL
 $event_id = $_GET['event_id'] ?? null;

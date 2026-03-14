@@ -42,7 +42,7 @@ function getEvents($keyword = "", $start_date = "", $end_date = "") {
     $conn = getConnection();
     
     // ตั้งต้น SQL ด้วย WHERE 1=1 เพื่อให้ง่ายต่อการต่อ String ด้วย AND
-    $sql = "SELECT * FROM events WHERE 1=1";
+   	$sql = "SELECT * FROM events WHERE 1=1 AND end_date >= NOW()";
     $types = "";     // เก็บชนิดข้อมูลสำหรับ bind_param (เช่น sss)
     $params = [];    // เก็บค่าตัวแปรที่จะใช้ค้นหา
     
@@ -154,5 +154,43 @@ function getEventImages($event_id) {
     $stmt->bind_param("i", $event_id);
     $stmt->execute();
     return $stmt->get_result();
+}
+function isEventExpired($end_date) {
+    date_default_timezone_set('Asia/Bangkok'); // ตั้งค่าเวลาให้เป็นไทย
+    $end = new DateTime($end_date);
+    $now = new DateTime();
+    return $now > $end;
+}
+function get_myEvent($user_id){
+    $conn = getConnection();
+    // ดึงกิจกรรมที่ฉันเป็นเจ้าของ
+    $sql = "SELECT * FROM events WHERE user_id = ? ORDER BY start_date DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    return $stmt->get_result();
+}
+
+function DeleteEvent($event_id){
+    $conn = getConnection();
+    //ลบข้อมูลลูกในตาราง event_images ก่อน
+    $sql_delete_images = "DELETE FROM event_images WHERE event_id = ?";
+    $stmt_images = $conn->prepare($sql_delete_images);
+    $stmt_images->bind_param("i", $event_id);
+    $stmt_images->execute();
+    $stmt_images->close();
+
+    $sql_delete_registrations = "DELETE FROM registrations WHERE event_id = ?";
+    $stmt_images = $conn->prepare($sql_delete_registrations);
+    $stmt_images->bind_param("i", $event_id);
+    $stmt_images->execute();
+    $stmt_images->close();
+
+    //เมื่อไม่มีลูกแล้ว จึงลบข้อมูลแม่ในตาราง events ได้
+    $sql = "DELETE from events WHERE event_id = ? ";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i",$event_id);
+    $success = $stmt->execute();
+    return $success;
 }
 ?>

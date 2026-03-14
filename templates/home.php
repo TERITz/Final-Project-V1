@@ -56,9 +56,9 @@
 
         <div class="space-y-6">
             <?php
+            
             if ($data['events']->num_rows > 0):
                 while ($row = $data['events']->fetch_assoc()):
-
                     $approvedCount = getApprovedCount($row['event_id']);
                     $isFull = ($approvedCount >= $row['max_attendees']);
 
@@ -70,7 +70,6 @@
                     }
             ?>
                     <div class="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition overflow-hidden">
-
                         <?php if (!empty($images)): ?>
                             <div class="relative h-52 overflow-hidden bg-gray-100" data-carousel data-index="0">
 
@@ -121,6 +120,13 @@
                                         class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition">ดูรายชื่อผู้ที่ได้เข้าร่วมกิจกรรมแล้ว</a>
                                     <a href="/event_stats?id=<?php echo $row['event_id']; ?>"
                                         class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition">📊 สถิติภาพรวม</a>
+                                    <form action="/delete_event" method="POST" onsubmit="return confirm('คุณแน่ใจหรือไม่ที่จะลบกิจกรรมนี้?');" class="inline-block">
+                                        <input type="hidden" name="id" value="<?php echo $row['event_id']; ?>">
+    
+                                        <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition">
+                                            ลบกิจกรรม
+                                        </button>
+                                    </form>
                                 <?php else: ?>
                                     <?php $regStatus = getRegistrationStatus($_SESSION['user_id'], $row['event_id']); ?>
 

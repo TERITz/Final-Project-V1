@@ -83,7 +83,7 @@ function getApprovedCount($event_id) {
 
 //ฟังก์ชันคืนค่า Status เอาไปใช้ใน home เเสดงให้ผู้ใช้รู้นะครับน้อง ว่าตัวเอง ได้รับการอนุมัติรึยังที่ขอไป
 function getRegistrationStatus($user_id, $event_id) {
-    global $conn;
+   	$conn = getConnection();
     $sql = "SELECT status FROM registrations WHERE user_id = ? AND event_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ii", $user_id, $event_id);

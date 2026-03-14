@@ -1,5 +1,5 @@
 <?php
-// routes/attendeelist.php 
+// routes/attendeelist.php
 
 if (!isset($_SESSION['user_id']) || !isset($_GET['id'])) {
     header("Location: /");
@@ -8,12 +8,16 @@ if (!isset($_SESSION['user_id']) || !isset($_GET['id'])) {
 
 $event_id = $_GET['id'];
 
-// ดึงข้อมูลรายชื่อผู้เข้าร่วม
-$attendeelist = getattendeelist($event_id);
+// ดึง attendees แล้วคำนวณ OTP ของแต่ละคนใน route ก่อนส่งไป View
+$result    = getattendeelist($event_id);
+$attendees = [];
+while ($row = $result->fetch_assoc()) {
+    $row['otp'] = generateUserOTP($event_id, $row['email']);
+    $attendees[] = $row;
+}
 
-// ส่งไปหน้า View
 renderView('attendeelist', [
-    'attendeelist' => $attendeelist,
+    'attendeelist' => $attendees,
     'event_id'     => $event_id,
 ]);
 ?>

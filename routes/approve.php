@@ -1,4 +1,9 @@
 <?php
+    
+if (!isset($_SESSION['user_id'])) {
+    header("Location: /login");
+    exit;
+}
 // routes/approve.php การ updata status ผู้ขอเข้าร่วม
 global $conn;
 
