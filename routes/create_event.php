@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // 1. สร้างกิจกรรมลง Database
     $event_id = createEvent($user_id, $name, $desc, $start, $end, $max);
-
+    
     if ($event_id) {
         // 2. ถ้าสร้างสำเร็จ -> จัดการอัปโหลดรูป
         if (!file_exists(__DIR__ . "/../public/uploads/")) {
