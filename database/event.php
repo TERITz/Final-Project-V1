@@ -26,18 +26,6 @@ function addEventImage($event_id, $image_path)
     return $stmt->execute();
 }
 
-function getAllEvents() {
-    $conn = getConnection();
-    // ดึงข้อมูลกิจกรรม + รูปภาพแรก (ถ้ามี)
-    $sql = "SELECT e.*, u.firstname, u.lastname, 
-            (SELECT image_path FROM event_images WHERE event_id = e.event_id LIMIT 1) as image_path
-            FROM events e 
-            JOIN users u ON e.user_id = u.user_id 
-            ORDER BY e.event_id DESC";
-    $result = $conn->query($sql);
-    return $result; // ส่งคืนเป็น Object ผลลัพธ์ (เอาไป fetch ต่อหน้าเว็บ)
-}
-
 function getEvents($keyword = "", $start_date = "", $end_date = "") {
     $conn = getConnection();
     
