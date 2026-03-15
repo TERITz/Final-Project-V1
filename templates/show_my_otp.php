@@ -1,5 +1,7 @@
 <?php
 // คำนวณรหัส OTP โดยใช้ Email ของนักศึกษาคนนี้
+$my_otp = generateUserOTP($data['event_id'], $data['user_email']);;
+$remaining_seconds = 1800 - (time() % 1800); 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +25,7 @@
 
         <div class="bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl py-10 mb-8">
             <span id="otp-code" class="text-6xl font-black text-blue-600 tracking-tighter">
-                <?php echo $data["my_otp"]; ?>
+                <?php echo $my_otp; ?>
             </span>
         </div>
 
@@ -37,7 +39,7 @@
     </div>
 
     <script>
-        let seconds = <?php echo $data["remaining_seconds"]; ?>;
+        let seconds = <?php echo $remaining_seconds; ?>;
         function updateTimer() {
             let mins = Math.floor(seconds / 60);
             let secs = seconds % 60;
