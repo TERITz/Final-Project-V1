@@ -33,8 +33,8 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 bg-white">
-                        <?php if ($data['attendeelist']->num_rows > 0): ?>
-                            <?php while($row = $data['attendeelist']->fetch_assoc()): ?>
+                        <?php if (count($data['attendeelist']) > 0): ?>
+                            <?php foreach ($data['attendeelist'] as $row): ?>
                             <tr class="hover:bg-gray-50 transition <?php echo ($row['status'] === 'checked-in') ? 'bg-green-50' : ''; ?>">
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                                     <?php echo $row['reg_date']; ?>
@@ -54,16 +54,12 @@
                                     <?php elseif ($row['status'] === 'Approved'): ?>
                                         <span class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">อนุมัติแล้ว</span>
                                     <?php else: ?>
-                                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200">ปฏิเสธ</span>
+                                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700">ปฏิเสธ</span>
                                     <?php endif; ?>
                                 </td>
                                 
                                 <td class="px-6 py-4 whitespace-nowrap text-center font-bold text-blue-600 text-xl">
-                                    <?php 
-                                        // ลอง echo อีเมลออกมาดูข้างๆ รหัสเลยครับว่าตรงกับในตารางมั้ย 
-                                        echo generateUserOTP($data['event_id'], $row['email']); 
-                                    ?>
-                                </td>
+                                    <?php echo $row['otp']; ?> </td>
 
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     <?php if ($row['status'] === 'checked-in'): ?>
@@ -82,7 +78,7 @@
                                     <?php endif; ?>
                                 </td>
                             </tr>
-                            <?php endwhile; ?>
+                            <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
                                 <td colspan="7" class="px-6 py-20 text-center text-gray-400 italic bg-gray-50">
