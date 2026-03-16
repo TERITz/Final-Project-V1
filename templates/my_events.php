@@ -11,6 +11,36 @@
     <div class="max-w-4xl mx-auto px-4 py-10">
         <h1 class="text-2xl font-bold mb-6">กิจกรรมที่เข้าร่วม</h1>
 
+        <!-- สถิติภาพรวม -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 text-center">
+                <p class="text-xs font-bold text-gray-500 uppercase mb-1">ทั้งหมด</p>
+                <p class="text-3xl font-black text-gray-800"><?php echo $data['stats']['total'] ?? 0; ?></p>
+                <p class="text-xs text-gray-400 mt-1">กิจกรรม</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 text-center">
+                <p class="text-xs font-bold text-yellow-500 uppercase mb-1">รออนุมัติ</p>
+                <p class="text-3xl font-black text-gray-800"><?php echo $data['stats']['pending'] ?? 0; ?></p>
+                <p class="text-xs text-gray-400 mt-1">ครั้ง</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 text-center">
+                <p class="text-xs font-bold text-green-500 uppercase mb-1">อนุมัติแล้ว</p>
+                <p class="text-3xl font-black text-gray-800"><?php echo $data['stats']['approved'] ?? 0; ?></p>
+                <p class="text-xs text-gray-400 mt-1">ครั้ง</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 text-center">
+                <p class="text-xs font-bold text-blue-500 uppercase mb-1">เข้างานแล้ว</p>
+                <p class="text-3xl font-black text-gray-800"><?php echo $data['stats']['checked_in'] ?? 0; ?></p>
+                <p class="text-xs text-gray-400 mt-1">ครั้ง</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 text-center">
+                <p class="text-xs font-bold text-red-500 uppercase mb-1">ถูกปฏิเสธ</p>
+                <p class="text-3xl font-black text-gray-800"><?php echo $data['stats']['rejected'] ?? 0; ?></p>
+                <p class="text-xs text-gray-400 mt-1">ครั้ง</p>
+            </div>
+        </div>
+
+        <!-- ตารางรายการ -->
         <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
             <table class="w-full text-left">
                 <thead class="bg-gray-100 border-b">

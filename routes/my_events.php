@@ -7,7 +7,11 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
-// เรียกใช้ฟังก์ชันที่เราเพิ่งสร้างใน Model
 $my_list = getMyRegistrations($user_id);
+$stats   = getMyStats($user_id);
 
-renderView('my_events', ['my_list' => $my_list]);
+renderView('my_events', [
+    'my_list' => $my_list,
+    'stats'   => $stats
+]);
+?>

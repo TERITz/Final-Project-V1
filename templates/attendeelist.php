@@ -10,7 +10,7 @@
     <?php include 'header.php' ?>
 
     <div class="max-w-7xl mx-auto px-4 py-8">
-        
+
         <div class="flex items-center justify-between mb-6">
             <h1 class="text-3xl font-bold text-gray-800">รายชื่อผู้เข้าร่วมกิจกรรม</h1>
             <a href="/" class="text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg transition font-bold">
@@ -18,6 +18,23 @@
             </a>
         </div>
 
+        <!-- กล่องกรอก OTP เพื่อเช็คอิน -->
+        <div class="bg-white rounded-xl shadow-sm border border-indigo-200 p-6 mb-6">
+            <h2 class="text-lg font-bold text-gray-800 mb-1">🔑 เช็คอินด้วย OTP</h2>
+            <p class="text-sm text-gray-500 mb-4">ให้ผู้เข้าร่วมแสดง OTP จากโทรศัพท์ แล้วกรอกตรงนี้เลย</p>
+            <form action="/verify_otp" method="POST" class="flex gap-3">
+                <input type="hidden" name="event_id" value="<?php echo $data['event_id']; ?>">
+                <input type="text" name="otp" maxlength="6" placeholder="กรอกรหัส OTP 6 หลัก" required
+                    class="flex-1 px-4 py-2.5 border-2 border-indigo-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-xl font-bold tracking-widest text-center"
+                    autofocus>
+                <button type="submit"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2.5 rounded-lg transition">
+                    ✅ ยืนยันเช็คอิน
+                </button>
+            </form>
+        </div>
+
+        <!-- ตารางรายชื่อ -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
@@ -28,8 +45,6 @@
                             <th class="px-6 py-4 text-sm font-bold uppercase tracking-wider">อีเมล</th>
                             <th class="px-6 py-4 text-sm font-bold uppercase tracking-wider">จังหวัด</th>
                             <th class="px-6 py-4 text-sm font-bold uppercase tracking-wider text-center">สถานะ</th>
-                            <th class="px-6 py-4 text-sm font-bold uppercase tracking-wider text-center bg-indigo-800">รหัส OTP ที่ต้องแสดง</th>
-                            <th class="px-6 py-4 text-sm font-bold uppercase tracking-wider text-center">จัดการการเข้างาน</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 bg-white">
@@ -50,42 +65,20 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     <?php if ($row['status'] === 'checked-in'): ?>
-                                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">เช็คอินแล้ว</span>
-                                    <?php elseif ($row['status'] === 'Approved'): ?>
-                                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">อนุมัติแล้ว</span>
-                                    <?php else: ?>
-                                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200">ปฏิเสธ</span>
-                                    <?php endif; ?>
-                                </td>
-                                
-                                <td class="px-6 py-4 whitespace-nowrap text-center font-bold text-blue-600 text-xl">
-                                    <?php 
-                                        // ลอง echo อีเมลออกมาดูข้างๆ รหัสเลยครับว่าตรงกับในตารางมั้ย 
-                                        echo generateUserOTP($data['event_id'], $row['email']); 
-                                    ?>
-                                </td>
-
-                                <td class="px-6 py-4 whitespace-nowrap text-center">
-                                    <?php if ($row['status'] === 'checked-in'): ?>
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">
-                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
-                                            เช็คอินเรียบร้อย
+                                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">
+                                            ✅ เช็คอินแล้ว
                                         </span>
-                                    <?php elseif ($row['status'] === 'Approved'): ?>
-                                        <a href="/confirm_checkin?event_id=<?php echo $data['event_id']; ?>&user_id=<?php echo $row['user_id']; ?>" 
-                                        class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition shadow-md inline-block"
-                                        onclick="return confirm('ยืนยันว่ารหัส OTP ตรงกัน และต้องการเช็คอินคุณ <?php echo $row['firstname']; ?>?');">
-                                        ✅ ยืนยันเข้างาน
-                                        </a>
                                     <?php else: ?>
-                                        <span class="text-gray-400 text-xs">-</span>
+                                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">
+                                            อนุมัติแล้ว รอเช็คอิน
+                                        </span>
                                     <?php endif; ?>
                                 </td>
                             </tr>
                             <?php endwhile; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="7" class="px-6 py-20 text-center text-gray-400 italic bg-gray-50">
+                                <td colspan="5" class="px-6 py-20 text-center text-gray-400 italic bg-gray-50">
                                     ยังไม่มีใครสมัครกิจกรรมนี้
                                 </td>
                             </tr>
@@ -97,11 +90,7 @@
     </div>
 
     <script>
-        // ให้หน้านี้รีเฟรชตัวเองทุกๆ 5 นาที (300,000 ms) 
-        // เพื่อให้รหัส OTP อัปเดตตามเวลาปัจจุบันอัตโนมัติ
-        setTimeout(function(){
-            window.location.reload();
-        }, 300000);
+        setTimeout(function(){ window.location.reload(); }, 300000);
     </script>
 </body>
 </html>

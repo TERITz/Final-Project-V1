@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
     <meta charset="UTF-8">
     <title>หน้าหลัก - รายการกิจกรรม</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
 <body class="bg-gray-50 min-h-screen">
 
     <?php include 'header.php' ?>
@@ -17,7 +15,6 @@
 
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-8">
             <form action="/" method="GET" class="flex flex-wrap items-end gap-4">
-
                 <div class="flex-grow">
                     <label class="block text-sm font-medium text-gray-700 mb-1">ค้นหากิจกรรม</label>
                     <input type="text" name="search"
@@ -25,26 +22,22 @@
                         placeholder="ชื่อกิจกรรมหรือรายละเอียด..."
                         value="<?php echo htmlspecialchars($data['keyword'] ?? ''); ?>">
                 </div>
-
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">ตั้งแต่วันที่</label>
                     <input type="date" name="start_date"
                         class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                         value="<?php echo htmlspecialchars($data['start_date'] ?? ''); ?>">
                 </div>
-
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">ถึงวันที่</label>
                     <input type="date" name="end_date"
                         class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                         value="<?php echo htmlspecialchars($data['end_date'] ?? ''); ?>">
                 </div>
-
                 <div class="flex gap-2">
                     <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold transition">
                         ค้นหา
                     </button>
-
                     <?php if ($data['keyword'] || $data['start_date'] || $data['end_date']): ?>
                         <a href="/" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-bold transition">
                             ล้างค่า
@@ -55,30 +48,24 @@
         </div>
 
         <div class="space-y-6">
-            <?php
-            
-            if ($data['events']->num_rows > 0):
-                while ($row = $data['events']->fetch_assoc()):
-                    $approvedCount = getApprovedCount($row['event_id']);
-                    $isFull = ($approvedCount >= $row['max_attendees']);
-
-                    // ดึงรูปทั้งหมดของกิจกรรมนี้
-                    $images = [];
-                    $imgResult = getEventImages($row['event_id']);
-                    while ($img = $imgResult->fetch_assoc()) {
-                        $images[] = $img['image_path'];
-                    }
-            ?>
+            <?php if (!empty($data['events'])): ?>
+                <?php foreach ($data['events'] as $row): ?>
+                    <?php
+                        // ใช้ข้อมูลที่ route คำนวณมาให้แล้ว ไม่เรียก Model เองในหน้า View
+                        $approvedCount = $row['approvedCount'];
+                        $isFull        = $row['isFull'];
+                        $regStatus     = $row['regStatus'];
+                        $images        = $row['images'];
+                    ?>
                     <div class="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition overflow-hidden">
+
                         <?php if (!empty($images)): ?>
                             <div class="relative h-52 overflow-hidden bg-gray-100" data-carousel data-index="0">
-
                                 <?php foreach ($images as $i => $imgPath): ?>
                                     <img src="/uploads/<?php echo htmlspecialchars($imgPath); ?>"
                                         class="carousel-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
                                         style="opacity: <?php echo $i === 0 ? '1' : '0'; ?>">
                                 <?php endforeach; ?>
-
                                 <?php if (count($images) > 1): ?>
                                     <div class="absolute bottom-2 left-0 right-0 flex justify-center gap-1.5">
                                         <?php foreach ($images as $i => $_): ?>
@@ -86,7 +73,6 @@
                                         <?php endforeach; ?>
                                     </div>
                                 <?php endif; ?>
-
                             </div>
                         <?php endif; ?>
 
@@ -94,11 +80,9 @@
                             <h3 class="text-xl font-bold text-gray-800 mb-3 border-b border-gray-100 pb-2">
                                 <?php echo htmlspecialchars($row['event_name']); ?>
                             </h3>
-
                             <p class="text-gray-600 mb-4">
                                 <b class="text-gray-800">รายละเอียด:</b> <?php echo htmlspecialchars($row['description']); ?>
                             </p>
-
                             <p class="text-sm text-gray-500 mb-6 bg-blue-50 p-3 rounded-lg inline-block">
                                 <b class="text-gray-700">วันที่:</b> <?php echo $row['start_date']; ?> ถึง <?php echo $row['end_date']; ?> |
                                 <b class="text-gray-700">รับจำนวน:</b>
@@ -122,14 +106,11 @@
                                         class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition">📊 สถิติภาพรวม</a>
                                     <form action="/delete_event" method="POST" onsubmit="return confirm('คุณแน่ใจหรือไม่ที่จะลบกิจกรรมนี้?');" class="inline-block">
                                         <input type="hidden" name="id" value="<?php echo $row['event_id']; ?>">
-    
                                         <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition">
                                             ลบกิจกรรม
                                         </button>
                                     </form>
                                 <?php else: ?>
-                                    <?php $regStatus = getRegistrationStatus($_SESSION['user_id'], $row['event_id']); ?>
-
                                     <?php if (!$regStatus): ?>
                                         <?php if ($isFull): ?>
                                             <button class="bg-gray-400 text-white px-6 py-2 rounded-lg font-bold cursor-not-allowed" disabled>เต็มแล้ว</button>
@@ -138,7 +119,6 @@
                                                 class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold transition"
                                                 onclick="return confirm('ยืนยันที่จะเข้าร่วมกิจกรรมนี้?');">ขอเข้าร่วม</a>
                                         <?php endif; ?>
-
                                     <?php elseif ($regStatus === 'Approved' || $regStatus === 'checked-in'): ?>
                                         <button class="bg-green-600 text-white px-4 py-2 rounded-lg font-bold flex items-center cursor-not-allowed" disabled>
                                             ✔️ <?php echo ($regStatus === 'checked-in') ? 'เข้างานเรียบร้อยแล้ว' : 'ผ่านการอนุมัติแล้ว'; ?>
@@ -149,22 +129,17 @@
                                                 🔑 ดูรหัส OTP
                                             </a>
                                         <?php endif; ?>
-
                                     <?php elseif ($regStatus === 'Pending'): ?>
                                         <button class="bg-gray-400 text-white px-4 py-2 rounded-lg font-bold cursor-not-allowed" disabled>ลงทะเบียนแล้ว</button>
-
                                     <?php elseif ($regStatus === 'Rejected'): ?>
                                         <button class="bg-red-500 text-white px-4 py-2 rounded-lg font-bold cursor-not-allowed" disabled>❌ ไม่ผ่านการอนุมัติ</button>
                                     <?php endif; ?>
-
                                 <?php endif; ?>
                             </div>
                         </div>
                     </div>
-            <?php
-                endwhile;
-            else:
-            ?>
+                <?php endforeach; ?>
+            <?php else: ?>
                 <div class="bg-white p-10 rounded-xl border border-dashed border-gray-300 text-center">
                     <p class="text-gray-500 text-lg italic">ไม่พบกิจกรรมที่คุณค้นหา</p>
                     <a href="/" class="text-blue-500 hover:underline mt-2 inline-block font-bold">กลับไปดูรายการทั้งหมด</a>
@@ -178,23 +153,19 @@
             var slides = carousel.querySelectorAll('.carousel-slide');
             var dots   = carousel.querySelectorAll('.carousel-dot');
             if (slides.length <= 1) return;
-
             setInterval(function() {
                 var current = parseInt(carousel.dataset.index);
                 var next    = (current + 1) % slides.length;
-
                 slides[current].style.opacity = '0';
                 slides[next].style.opacity    = '1';
                 dots[current].classList.replace('bg-white',    'bg-white/50');
                 dots[current].classList.replace('scale-125',   'scale-100');
                 dots[next].classList.replace('bg-white/50', 'bg-white');
                 dots[next].classList.add('scale-125');
-
                 carousel.dataset.index = next;
             }, 3000);
         });
     </script>
 
 </body>
-
 </html>
