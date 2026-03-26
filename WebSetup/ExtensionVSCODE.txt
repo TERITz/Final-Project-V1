@@ -1,0 +1,5 @@
+PHP intelephense
+HTML CSS Support
+Live Preview
+Live Server
+PHP Server

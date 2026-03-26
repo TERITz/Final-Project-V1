@@ -1,0 +1,64 @@
+XAMPP vhost : C:\xampp\apache\conf\extra
+-------------------------------------------------
+# Virtual Hosts
+#
+# Required modules: mod_log_config
+
+# If you want to maintain multiple domains/hostnames on your
+# machine you can setup VirtualHost containers for them. Most configurations
+# use only name-based virtual hosts so the server doesn't need to worry about
+# IP addresses. This is indicated by the asterisks in the directives below.
+#
+# Please see the documentation at 
+# <URL:http://httpd.apache.org/docs/2.4/vhosts/>
+# for further details before you try to setup virtual hosts.
+#
+# You may use the command line option '-S' to verify your virtual host
+# configuration.
+
+#
+# Use name-based virtual hosting.
+#
+##NameVirtualHost *:80
+#
+# VirtualHost example:
+# Almost any Apache directive may go into a VirtualHost container.
+# The first VirtualHost section is used for all requests that do not
+# match a ##ServerName or ##ServerAlias in any <VirtualHost> block.
+#
+<VirtualHost *:80>
+    ServerName localhost
+    DocumentRoot "C:\xampp\htdocs"
+    <Directory "C:\xampp\htdocs">
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+
+<VirtualHost *:80>
+    ServerName reg.localhost
+    DocumentRoot "C:\All\Web\Final-Project-V1-main\public"
+    <Directory "C:\All\Web\Final-Project-V1-main\public">
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+----------------------------------------------------------------------
+
+hosts pc : C:\Windows\System32\drivers\etc
+
+127.0.0.1 reg.localhost
+
+-----------------------------------------------
+
+Claude.ai : gamezk681@gmail.com
+
+-----------------------------------------------
+
+Web Database : https://freesqldatabase.com/
+
+tewaritking26@gmail.com
+King254815#
+
